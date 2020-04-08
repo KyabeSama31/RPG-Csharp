@@ -6,6 +6,10 @@ namespace RPG_Csharp
 {
     class Bot
     {
+        GameHandler gameHandler = new GameHandler();
+
+        Dictionary<string, Items.Weapons> Inventory = new Dictionary<string, Items.Weapons>();
+
         public string pseudo { get; private set; }
         private int physique;
         private int mental;
@@ -27,6 +31,7 @@ namespace RPG_Csharp
             perception = 70;
             vie = 20;
             mana = 15;
+            Inventory.Add("Arme", new Items.Weapons(classe));
         }
         public void display()
         {
@@ -73,5 +78,46 @@ namespace RPG_Csharp
             Console.WriteLine(" ");
 
         }
+
+        public void actions(Player player)
+        {
+            int succes = physique;
+
+            int result = gameHandler.RollDices();
+
+
+            if (result <= 5)
+            {
+                Console.WriteLine("C'est une réussite critique ! La chance souri à vos ennemis ! ");
+                player.damagePlayer(Inventory["Arme"], 5);
+            }
+            if (result <= succes)
+            {
+                Console.WriteLine("Son action est réussie ! Faîtes plus attention la prochaine fois ! ");
+                bool dodge = player.dodge(this);
+
+                if (!dodge)
+                {
+                    player.damagePlayer(Inventory["Arme"], 0);
+                } 
+                else
+                {
+                    Console.WriteLine("Vous avez réussi à éviter l'attaque ennemie.");
+                }
+
+            }
+            else if (result > succes && result < 95)
+            {
+                Console.WriteLine("Il s'est loupé ! Bien joué.");
+                //Conséquence à choisir
+            }
+            else
+            {
+                Console.WriteLine("C'est un echec critique ! Les Dieux sont avec vous ! ");
+                //Conséquence à choisir
+
+            }
+        }
     }
+
 }

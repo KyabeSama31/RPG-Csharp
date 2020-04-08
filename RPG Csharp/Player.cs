@@ -126,11 +126,12 @@ namespace RPG_Csharp
                     break;
                 case 2:
                     succes = mental;
-                    mana -= 5;
+                    mana -= 8;
                     break;
                 case 3:
                     moy = (physique + agilite) / 2;
                     succes = (int)moy;
+                    mana -= 5;
                     break;
             }
 
@@ -140,7 +141,66 @@ namespace RPG_Csharp
             Console.WriteLine($"Vous avez obtenu \u001b[31m{result}\u001b[0m à votre lancé !");
             Console.WriteLine(" ");
             Console.WriteLine(" ");
+            resultats(result, bot,succes);
+           
+        }
 
+        public void damagePlayer(Items.Weapons weapons, int bonus)
+        {
+            Console.WriteLine(" ");
+            int damages = weapons.dealDamages();
+            Console.WriteLine($"Vous venez de recevoir \u001b[31m{damages}\u001b[0m points de dégats.");
+            Console.WriteLine($"Votre vie est de \u001b[32m{vie}\u001b[0m pv.");
+            vie -= damages + bonus;
+            Console.WriteLine(" ");
+        }
+
+        public bool dodge(Bot bot)
+        {
+            int choix;
+            do
+            {
+                Console.WriteLine("Voulez vous tenter d'esquiver ? ");
+                Console.WriteLine("Oui : 1\n Non : 2 ");
+                choix = Utilisateur.saisirEntier();
+            } while (choix < 1 && choix > 2);
+
+            switch (choix)
+            {
+                case 1:
+                    int succes = (int)(agilite + perception) / 2;
+                    int result = gameHandler.RollDices();
+                    if (result<=5)
+                    {
+                        Console.WriteLine("Réussite Critique ! GG !");
+                        
+                        return true;
+                    }
+                    else if (result <= succes)
+                    {
+                        Console.WriteLine("Bien joué vous l'avez évité !");
+                        return true;
+                    }
+                    else if (result > succes && result< 95)
+                    {
+                        Console.WriteLine("Dommage c'est loupé ! ");
+                        return false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("C'est un echec critique ! Vous tombez par terre ! -5pv");
+                        vie -= 5;
+                        return false;
+                    }
+                case 2:
+                    return false;
+                default:
+                   return false;
+            }
+        }
+
+        public void resultats(int result, Bot bot, int succes)
+        {
             if (result <= 5)
             {
                 Console.WriteLine("C'est une réussite critique ! Vous êtes en veine aujourd'hui ! ");

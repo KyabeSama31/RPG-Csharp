@@ -25,17 +25,35 @@ namespace RPG_Csharp
                 correct = Utilisateur.saisirEntier();
                 Console.WriteLine(" ");
             } while (correct == 0);
+
+
             Console.WriteLine("Attention ! Il y a un ennemi sur la route !");
             Console.WriteLine(" ");
             b1 = new Bot();
+
             do
             {
                 b1.display();
                 GameHandler.confirmation();
                 Console.WriteLine("");
+
                 p1.actions(b1);
                 Console.WriteLine("");
+
+                Console.WriteLine("Votre adversaire riposte ! Soyez sur vos gardes !");
+                GameHandler.confirmation();
+                b1.actions(p1);
+                p1.display();
+
             } while (p1.getLife() > 0 && b1.getLife() > 0);
+
+            if (p1.getLife() <=0)
+            {
+                Console.WriteLine("L'aventure est finie pour vous. Vous vous êtes bien battus !");
+            } else
+            {
+                Console.WriteLine("Vous avez vaincu votre adversaire. Bien joué !");
+            }
         }
     }
 }
