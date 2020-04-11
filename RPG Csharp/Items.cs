@@ -6,6 +6,16 @@ namespace RPG_Csharp
 {
     class Items
     {
+
+        public Items(string classe)
+        {
+            Weapons weapons = new Weapons(classe);
+        }
+        public Items (int potion)
+        {
+            Potions potions = new Potions();
+        }
+
         public class Weapons
         {
             private string type;
@@ -25,7 +35,6 @@ namespace RPG_Csharp
                         break;
                 }
             }
-
             public int dealDamages()
             {
                 Random r = new Random();
@@ -37,17 +46,53 @@ namespace RPG_Csharp
                         return r.Next(1, 4);
                     case "BattleAxe":
                         return r.Next(1, 9);
+                    case "SwordUp":
+                        return r.Next(1, 9);
+                    case "StaffdUp":
+                        return r.Next(1, 6);
+                    case "BattleAxeUp":
+                        return r.Next(1, 11);
                     default:
                         return 0;
                 }
             }
 
+            public int setType()
+            {
+                switch (type)
+                {
+                    case "Sword":
+                        type = "SwordUp";
+                        return 1;
+                    case "Staff":
+                        type = "StaffdUp";
+                        return 1;
+                    case "BattleAxe":
+                        type = "BattleAxeUp";
+                        return 1;
+                    default:
+                        Console.WriteLine("Votre arme est meilleure que la sienne.");
+                        return -1;
+
+                }
+            }
+
         }
+       
 
         class Potions
         {
-
+            private int healingBonus;
+            public Potions()
+            {
+                healingBonus = 5;
+            }
+            public int usePotion()
+            {
+                return healingBonus;
+            }
         }
+
 
         class Armors
         {

@@ -49,15 +49,15 @@ namespace RPG_Csharp
             do
             {
                 Console.WriteLine("Indiquez votre statistique en Physique : ");
-                physique = Utilisateur.saisirEntier();
+                physique = 80;//Utilisateur.saisirEntier();
                 Console.WriteLine("Indiquez votre statistique en Mental : ");
-                mental = Utilisateur.saisirEntier();
+                mental = 35; //Utilisateur.saisirEntier();
                 Console.WriteLine("Indiquez votre statistique en Agilité : ");
-                agilite = Utilisateur.saisirEntier();
+                agilite = 40; //Utilisateur.saisirEntier();
                 Console.WriteLine("Indiquez votre statistique en Charisme : ");
-                charisme = Utilisateur.saisirEntier();
+                charisme = 55;// Utilisateur.saisirEntier();
                 Console.WriteLine("Indiquez votre statistique en Perception : ");
-                perception = Utilisateur.saisirEntier();
+                perception = 80;// Utilisateur.saisirEntier();
 
                 sommeStat = physique + mental + agilite + charisme + perception;
 
@@ -292,24 +292,33 @@ namespace RPG_Csharp
         {
             int choix;
             Console.WriteLine("Vous avez le droit à un nouvel item ! ");
+            int error = 1;
             do
             {
-                Console.WriteLine("Que voulez vous faire ? ");
-                Console.WriteLine("Je vais récupérer l'arme du vaincu ! : 1");
-                Console.WriteLine("J'ai cru apercevoir une potion dans sa poche : 2");
-                Console.WriteLine("Son armure est magnifique ! Maintenant elle est à moi ! : 3");
-                choix = Utilisateur.saisirEntier();
-                Console.WriteLine(" ");
-            } while (choix < 1 || choix > 3);
+                do
+                {
+                    Console.WriteLine("Que voulez vous faire ? ");
+                    Console.WriteLine("Je vais récupérer l'arme du vaincu ! : 1");
+                    Console.WriteLine("J'ai cru apercevoir une potion dans sa poche : 2");
+                    Console.WriteLine("Son armure est magnifique ! Maintenant elle est à moi ! : 3");
+                    choix = Utilisateur.saisirEntier();
+                    Console.WriteLine(" ");
+                } while (choix < 1 || choix > 3);
 
-            switch (choix)
-            {
-                case 1:
-
-                    break;
-                default:
-                    break;
-            }
+                switch (choix)
+                {
+                    case 1:
+                       error = Inventory["Arme"].setType();
+                        break;
+                    case 2:
+                        int potion = 1;
+                        Inventory.Add("Potion", new Items(potion));
+                        break;
+                    default:
+                        break;
+                }
+            } while (error == -1);
+           
         }
     }
 }
