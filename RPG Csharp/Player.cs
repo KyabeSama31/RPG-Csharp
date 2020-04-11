@@ -7,8 +7,8 @@ namespace RPG_Csharp
     class Player
     {
         GameHandler gameHandler = new GameHandler();
-
-        Dictionary<string, Items.Weapons> Inventory = new Dictionary<string, Items.Weapons>();
+        Items.Armors armor = new Items.Armors();
+        Dictionary<string, dynamic> Inventory = new Dictionary<string, dynamic>();
 
         public string pseudo { get; private set; }
         private int physique;
@@ -192,7 +192,7 @@ namespace RPG_Csharp
             int damages = weapons.dealDamages();
             Console.WriteLine($"Vous venez de recevoir \u001b[31m{damages}\u001b[0m points de dégats.");
             Console.WriteLine($"Votre vie est de \u001b[32m{vie}\u001b[0m pv.");
-            vie -= damages + bonus;
+            vie -= damages + bonus - armor.getArmorValue();
             Console.WriteLine(" ");
         }
 
@@ -311,14 +311,59 @@ namespace RPG_Csharp
                        error = Inventory["Arme"].setType();
                         break;
                     case 2:
-                        int potion = 1;
-                        Inventory.Add("Potion", new Items(potion));
+                        try { 
+                        Inventory.Add("Potion", new Items.Potions());
+                        } catch (ArgumentException)
+                        {
+                            Console.WriteLine("Vous avez déjà une potion sur vous. ");
+                            error = -1;
+                        }
+                        break;
+                    case 3:
+                        error = getNewArmor();
                         break;
                     default:
                         break;
                 }
             } while (error == -1);
            
+        }
+        private int getNewArmor()
+        {
+            try
+            {
+                Inventory.Add("Plastron", new Items.Armors("plastron"));
+            }
+            catch (ArgumentException)
+            {
+                try
+                {
+                    Console.WriteLine("Vous avez déjà ce plaston prenez le casque plutôt.");
+                    Inventory.Add("Casque", new Items.Armors("casque"));
+                }
+                catch (ArgumentException)
+                {
+                    try
+                    {
+                        Console.WriteLine("Vous avez déjà ce casque prenez le pantalon plutôt.");
+                        Inventory.Add("Pantalon", new Items.Armors("pantalon"));
+                    }
+                    catch (ArgumentException)
+                    {
+                        try
+                        {
+                            Console.WriteLine("Vous avez déjà ce pantalon prenez les bottes plutôt.");
+                            Inventory.Add("Bottes", new Items.Armors("bottes"));
+                        }
+                        catch (ArgumentException)
+                        {
+                            Console.WriteLine("Vous avez déjà une arumre complète");
+                           return -1;
+                        }
+                    }
+                }
+            }
+            return 1;
         }
     }
 }

@@ -6,16 +6,6 @@ namespace RPG_Csharp
 {
     class Items
     {
-
-        public Items(string classe)
-        {
-            Weapons weapons = new Weapons(classe);
-        }
-        public Items (int potion)
-        {
-            Potions potions = new Potions();
-        }
-
         public class Weapons
         {
             private string type;
@@ -80,7 +70,7 @@ namespace RPG_Csharp
         }
        
 
-        class Potions
+       public class Potions
         {
             private int healingBonus;
             public Potions()
@@ -94,9 +84,39 @@ namespace RPG_Csharp
         }
 
 
-        class Armors
+        public class Armors
         {
+            private int armorValue=0;
+            public Armors(string type)
+            {
+                
+                switch (type)
+                {
+                    case "plastron":
+                        armorValue += 5;
+                        break;
+                    case "casque":
+                        armorValue += 3;
+                        break;
+                    case "pantalon":
+                        armorValue += 4;
+                        break;
+                    case "bottes":
+                        armorValue += 3;
+                        break;
 
+                    default:
+                        break;
+                }
+            }
+            public Armors()
+            {
+
+            }
+            public int getArmorValue()
+            {
+                return armorValue;
+            }
         }
     }
 }
