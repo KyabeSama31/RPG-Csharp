@@ -83,6 +83,7 @@ namespace RPG_Csharp
             return vie;
         }
 
+
         public string setPseudo(string newPseudo)
         {
             return newPseudo;

@@ -7,8 +7,9 @@ namespace RPG_Csharp
     class Bot
     {
         GameHandler gameHandler = new GameHandler();
+        Items.Armors armor = new Items.Armors();
 
-        Dictionary<string, Items.Weapons> Inventory = new Dictionary<string, Items.Weapons>();
+        Dictionary<string, dynamic> Inventory = new Dictionary<string, dynamic>();
 
         public string pseudo { get; private set; }
         private int physique;
@@ -19,8 +20,10 @@ namespace RPG_Csharp
         private int vie;
         private int mana;
         private string classe;
+        private int xp;
+        private int lvl;
 
-        public Bot()
+        public Bot(int newXp, int newLvl)
         {
             pseudo = GenerateName();
             classe = "Guerrier";
@@ -31,6 +34,8 @@ namespace RPG_Csharp
             perception = 70;
             vie = 20;
             mana = 15;
+            xp = newXp;
+            lvl = newLvl;
             Inventory.Add("Arme", new Items.Weapons(classe));
         }
         public void display()
@@ -65,16 +70,27 @@ namespace RPG_Csharp
             }
             return Name;
         }
+
+       
+
         public int getLife()
         {
             return vie;
+        }
+        public int getXp()
+        {
+            return xp;
+        }
+        public int getLvl()
+        {
+            return lvl;
         }
         public void damageBot(Items.Weapons weapons, int bonus)
         {
             Console.WriteLine(" ");
             int damages = weapons.dealDamages();
             Console.WriteLine($"Vous venez d'infliger \u001b[31m{damages}\u001b[0m points de dégats à \u001b[33m{pseudo}\u001b[0m.");
-            vie -= damages + bonus;
+            vie -= damages + bonus - armor.getArmorValue();
             Console.WriteLine(" ");
 
         }
@@ -117,6 +133,88 @@ namespace RPG_Csharp
                 //Conséquence à choisir
 
             }
+        }
+
+        public void setXp()
+        {
+            Console.WriteLine("Votre adversaire aussi devient plus fort. Attention ! ");
+            Random r = new Random();
+            int gainXp = r.Next(5, 21);
+            xp += gainXp;
+
+            if (xp >= 100)
+            {
+                xp -= 100;
+                lvl += 1;
+                Console.WriteLine($"Attention ! Les ennemis s'adaptent, ils sont niveau {lvl} !\n");
+                newItem();
+            }
+        }
+        private void newItem()
+        {
+            int choix;
+            int error = 1;
+            do
+            {
+                Random r = new Random();
+                choix = r.Next(1, 3);
+
+                switch (choix)
+                {
+                    case 1:
+                        error = Inventory["Arme"].setType();
+                        break;
+                    case 2:
+                        try
+                        {
+                            Inventory.Add("Potion", new Items.Potions());
+                        }
+                        catch (ArgumentException)
+                        {
+                            error = -1;
+                        }
+                        break;
+                    case 3:
+                        error = getNewArmor();
+                        break;
+                    default:
+                        break;
+                }
+            } while (error == -1);
+
+        }
+        private int getNewArmor()
+        {
+            try
+            {
+                Inventory.Add("Plastron", new Items.Armors("plastron"));
+            }
+            catch (ArgumentException)
+            {
+                try
+                {
+                    Inventory.Add("Casque", new Items.Armors("casque"));
+                }
+                catch (ArgumentException)
+                {
+                    try
+                    {
+                        Inventory.Add("Pantalon", new Items.Armors("pantalon"));
+                    }
+                    catch (ArgumentException)
+                    {
+                        try
+                        {
+                            Inventory.Add("Bottes", new Items.Armors("bottes"));
+                        }
+                        catch (ArgumentException)
+                        {
+                            return -1;
+                        }
+                    }
+                }
+            }
+            return 1;
         }
     }
 

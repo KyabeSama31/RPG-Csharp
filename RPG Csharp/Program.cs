@@ -12,6 +12,7 @@ namespace RPG_Csharp
             Player p1;
             Bot b1;
             bool continuePlay;
+            int roundNb = 0, xpB = 0, lvlB = 0;
             do //Mise en place du jeu avec la création du personnage 
             {
                 Console.WriteLine("Entrez votre pseudo : ");
@@ -32,7 +33,7 @@ namespace RPG_Csharp
             {
                 Console.WriteLine("Attention ! Il y a un ennemi sur la route !");
                 Console.WriteLine(" ");
-                b1 = new Bot();
+                b1 = new Bot(xpB,lvlB);
                 do
                 {
                     b1.display();
@@ -58,7 +59,13 @@ namespace RPG_Csharp
 
                 p1.setXp();
 
+                b1.setXp();
+                xpB += b1.getXp();
+                lvlB += b1.getLvl();
+
                 continuePlay = GameHandler.continuePlay();
+
+                roundNb++;
 
             } while (continuePlay);
 

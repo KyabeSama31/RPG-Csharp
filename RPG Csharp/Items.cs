@@ -69,7 +69,6 @@ namespace RPG_Csharp
 
         }
        
-
        public class Potions
         {
             private int healingBonus;
