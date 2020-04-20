@@ -25,7 +25,6 @@ namespace RPG_Csharp
                         break;
                 }
             }
-
             public int dealDamages()
             {
                 Random r = new Random();
@@ -37,21 +36,86 @@ namespace RPG_Csharp
                         return r.Next(1, 4);
                     case "BattleAxe":
                         return r.Next(1, 9);
+                    case "SwordUp":
+                        return r.Next(1, 9);
+                    case "StaffdUp":
+                        return r.Next(1, 6);
+                    case "BattleAxeUp":
+                        return r.Next(1, 11);
                     default:
                         return 0;
                 }
             }
 
+            public int setType()
+            {
+                switch (type)
+                {
+                    case "Sword":
+                        type = "SwordUp";
+                        return 1;
+                    case "Staff":
+                        type = "StaffdUp";
+                        return 1;
+                    case "BattleAxe":
+                        type = "BattleAxeUp";
+                        return 1;
+                    default:
+                        Console.WriteLine("Votre arme est meilleure que la sienne.");
+                        return -1;
+
+                }
+            }
+
+        }
+       
+       public class Potions
+        {
+            private int healingBonus;
+            public Potions()
+            {
+                healingBonus = 5;
+            }
+            public int usePotion()
+            {
+                return healingBonus;
+            }
         }
 
-        class Potions
+
+        public class Armors
         {
+            private int armorValue=0;
+            public Armors(string type)
+            {
+                
+                switch (type)
+                {
+                    case "plastron":
+                        armorValue += 5;
+                        break;
+                    case "casque":
+                        armorValue += 3;
+                        break;
+                    case "pantalon":
+                        armorValue += 4;
+                        break;
+                    case "bottes":
+                        armorValue += 3;
+                        break;
 
-        }
+                    default:
+                        break;
+                }
+            }
+            public Armors()
+            {
 
-        class Armors
-        {
-
+            }
+            public int getArmorValue()
+            {
+                return armorValue;
+            }
         }
     }
 }
