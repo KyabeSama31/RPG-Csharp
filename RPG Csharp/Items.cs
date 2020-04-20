@@ -51,6 +51,7 @@ namespace RPG_Csharp
 
         class Armors
         {
+
         }
     }
 }
