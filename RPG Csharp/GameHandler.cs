@@ -30,5 +30,27 @@ namespace RPG_Csharp
             dicesValue = generator.Next(1, 101);
             return dicesValue;
         }
+
+        public bool continuePlay()
+        {
+            int choix;
+            do
+            {
+                Console.WriteLine("Voulez vous continuer à jouer ?");
+                Console.WriteLine("Oui : 1 \nNon : 2");
+                choix = Utilisateur.saisirEntier();
+            } while (choix < 1 || choix > 2);
+
+            switch (choix)
+            {
+                case 1:
+                    return true;
+                case 2:
+                    return false;
+                default:
+                    break;
+            }
+            return false;
+        }
     }
 }
