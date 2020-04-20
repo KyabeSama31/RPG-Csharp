@@ -49,8 +49,9 @@ namespace RPG_Csharp
             Console.WriteLine($"Il a \u001b[31m{perception}\u001b[0m en perception.");
             Console.WriteLine($"Sa vie est de \u001b[32m{vie}\u001b[0m pv.");
             Console.WriteLine($"Sa mana est de \u001b[34m{mana}\u001b[0m pm.");
+            Console.WriteLine($"Il est de niveau \u001b[34m{lvl}\u001b[0m pm.");
         }
-        public string GenerateName()
+        private string GenerateName()//code récupéré sur internet pour générer le nom du bot à sa création
         {
             Random lentgh = new Random();
             int len = lentgh.Next(1, 11);
@@ -71,8 +72,6 @@ namespace RPG_Csharp
             return Name;
         }
 
-       
-
         public int getLife()
         {
             return vie;
@@ -85,16 +84,23 @@ namespace RPG_Csharp
         {
             return lvl;
         }
-        public void damageBot(Items.Weapons weapons, int bonus)
+
+        public void damageBot(Items.Weapons weapons, int bonus)//Fonction utilisée quand le bot reçoit des dégats 
         {
             Console.WriteLine(" ");
             int damages = weapons.dealDamages();
             Console.WriteLine($"Vous venez d'infliger \u001b[31m{damages}\u001b[0m points de dégats à \u001b[33m{pseudo}\u001b[0m.");
-            vie -= damages + bonus - armor.getArmorValue();
+            vie -= damages + bonus - armor.getArmorValue();//On prend en compte les dégats de l'armen 
             Console.WriteLine(" ");
 
         }
-
+        /*
+         * 
+         * Ces fonctions sont basiquement les mêmes que celles pour le joueur.
+         * Les choix sont remplacés par des nombres aléatoires.
+         * Pour l'instant le bot étant tout le temps un guerrier, sa seule attaque est un coup classique.
+         * 
+         */
         public void actions(Player player)
         {
             int succes = physique;

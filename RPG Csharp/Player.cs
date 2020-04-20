@@ -21,7 +21,10 @@ namespace RPG_Csharp
         private string classe;
         private int xp;
         private int lvl;
-
+        /*
+         * C'est le constructeur du Player.
+         * Il met en place la classe, les stats et l'arme du joueur 
+         */
         public Player(string newPseudo)
         {
             pseudo = setPseudo(newPseudo);
@@ -76,13 +79,13 @@ namespace RPG_Csharp
             Console.WriteLine($"Vous avez \u001b[31m{perception}\u001b[0m en perception.");
             Console.WriteLine($"Votre vie est de \u001b[32m{vie}\u001b[0m pv.");
             Console.WriteLine($"Votre mana est de \u001b[34m{mana}\u001b[0m pm.");
+            Console.WriteLine($"Vous êtes niveau \u001b[34m{lvl}\u001b[0m.");
         }
 
         public int getLife()
         {
             return vie;
         }
-
 
         public string setPseudo(string newPseudo)
         {
@@ -115,6 +118,22 @@ namespace RPG_Csharp
             }
         }
 
+        //Cette fonction permet de gérer les dégats infligés par le bot au joueur.
+        public void damagePlayer(Items.Weapons weapons, int bonus)
+        {
+            Console.WriteLine(" ");
+            int damages = weapons.dealDamages();
+            Console.WriteLine($"Vous venez de recevoir \u001b[31m{damages}\u001b[0m points de dégats.");
+            Console.WriteLine($"Votre vie est de \u001b[32m{vie}\u001b[0m pv.");
+            vie -= damages + bonus - armor.getArmorValue();
+            Console.WriteLine(" ");
+        }
+
+        /* 
+         * Les prochaines fonctions gèrent les actions que le joueur peut faire. 
+         * Elles sont décomposée pour permettre une lisibilité plus simple. 
+         */
+        // Celle ci est la fonction appelée dans Program.cs
         public void actions(Bot bot)
         {
             int succes = ChooseActions();
@@ -132,8 +151,8 @@ namespace RPG_Csharp
             Console.WriteLine(" ");
             resultats(result, bot, succes);
         }
-
-        private int ChooseActions()
+        // Celle ci gère le choix du joueur en lui même. Elle indique ce qu'il a le droit de faire 
+        private int ChooseActions() 
         {
             double moy;
             bool possibility;
@@ -186,39 +205,8 @@ namespace RPG_Csharp
             } while (!possibility);
             return -1;
         }
-
-        public void damagePlayer(Items.Weapons weapons, int bonus)
-        {
-            Console.WriteLine(" ");
-            int damages = weapons.dealDamages();
-            Console.WriteLine($"Vous venez de recevoir \u001b[31m{damages}\u001b[0m points de dégats.");
-            Console.WriteLine($"Votre vie est de \u001b[32m{vie}\u001b[0m pv.");
-            vie -= damages + bonus - armor.getArmorValue();
-            Console.WriteLine(" ");
-        }
-
-        public bool dodge(Bot bot)
-        {
-            int choix;
-            do
-            {
-                Console.WriteLine("Voulez vous tenter d'esquiver ? ");
-                Console.WriteLine("Oui : 1\nNon : 2 ");
-                choix = Utilisateur.saisirEntier();
-            } while (choix < 1 || choix > 2);
-
-            switch (choix)
-            {
-                case 1:
-                    return tentative();
-                case 2:
-                    return false;
-                default:
-                    return false;
-            }
-        }
-
-        private void resultats(int result, Bot bot, int succes)
+        //Celle ci vérifie si l'action est un succès ou non
+        private void resultats(int result, Bot bot, int succes) 
         {
             if (result <= 5)
             {
@@ -243,7 +231,28 @@ namespace RPG_Csharp
 
             }
         }
+        // Celle ci est une action secondaire. La fonction est appelée lorsque que le bot réussi son action. Elle permet au jouer de tenter une esquive.
+        public bool dodge(Bot bot)
+        {
+            int choix;
+            do
+            {
+                Console.WriteLine("Voulez vous tenter d'esquiver ? ");
+                Console.WriteLine("Oui : 1\nNon : 2 ");
+                choix = Utilisateur.saisirEntier();
+            } while (choix < 1 || choix > 2);
 
+            switch (choix)
+            {
+                case 1:
+                    return tentative();
+                case 2:
+                    return false;
+                default:
+                    return false;
+            }
+        }
+        //Celle ci s'occupe de vérifier si le joueur réussi son esquive ou non
         private bool tentative()
         {
             int succes = (int)(agilite + perception) / 2;
@@ -270,6 +279,11 @@ namespace RPG_Csharp
             vie -= 5;
             return false;
         }
+
+        /*
+         * Ces fonctions s'occupent de l'xp et du lvl up du joueur.
+         * Elle lui permettent aussi de récupérer de l'équipement
+         */
 
         public void setXp()
         {
