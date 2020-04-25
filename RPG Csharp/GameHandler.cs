@@ -6,6 +6,7 @@ namespace RPG_Csharp
 {
     class GameHandler
     {
+        //Passer les fonctions dans Utilisateur
         public void start(string pseudo)
         {
             Console.WriteLine($"Bienvenue à vous cher {pseudo} !");
@@ -14,43 +15,7 @@ namespace RPG_Csharp
             Console.WriteLine("Chaque statistique ne doit pas dépasser 80 ! ");
             Console.WriteLine("");
         }
-        public void confirmation()
-        {
-            string inputConfirmation;
-            do
-            {
-                Console.WriteLine("Appuyez sur Entrée pour continuer ");
-                inputConfirmation = Utilisateur.saisirTexte();
-            } while (inputConfirmation != "");
-        }
-        public int RollDices()
-        {
-            int dicesValue;
-            var generator = new Random();
-            dicesValue = generator.Next(1, 101);
-            return dicesValue;
-        }
 
-        public bool continuePlay()
-        {
-            int choix;
-            do
-            {
-                Console.WriteLine("Voulez vous continuer à jouer ?");
-                Console.WriteLine("Oui : 1 \nNon : 2");
-                choix = Utilisateur.saisirEntier();
-            } while (choix < 1 || choix > 2);
 
-            switch (choix)
-            {
-                case 1:
-                    return true;
-                case 2:
-                    return false;
-                default:
-                    break;
-            }
-            return false;
-        }
     }
 }

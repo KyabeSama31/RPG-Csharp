@@ -7,8 +7,9 @@ namespace RPG_Csharp
     class Bot
     {
         GameHandler gameHandler = new GameHandler();
-        Items.Armors armor = new Items.Armors();
-
+        Item.Armor armor = new Item.Armor();
+        ArmorListManager ArmorListManager = new ArmorListManager();
+        Utilisateur utilisateur = new Utilisateur();
         Dictionary<string, dynamic> Inventory = new Dictionary<string, dynamic>();
 
         public string pseudo { get; private set; }
@@ -36,7 +37,7 @@ namespace RPG_Csharp
             mana = 15;
             xp = newXp;
             lvl = newLvl;
-            Inventory.Add("Arme", new Items.Weapons(classe));
+            Inventory.Add("Arme", new Item.Weapon(classe));
         }
         public void display()
         {
@@ -85,7 +86,7 @@ namespace RPG_Csharp
             return lvl;
         }
 
-        public void damageBot(Items.Weapons weapons, int bonus)//Fonction utilisée quand le bot reçoit des dégats 
+        public void damageBot(Item.Weapon weapons, int bonus)//Fonction utilisée quand le bot reçoit des dégats 
         {
             Console.WriteLine(" ");
             int damages = weapons.dealDamages();
@@ -105,7 +106,7 @@ namespace RPG_Csharp
         {
             int succes = physique;
 
-            int result = gameHandler.RollDices();
+            int result = utilisateur.RollDices();
 
 
             if (result <= 5)
@@ -173,7 +174,7 @@ namespace RPG_Csharp
                     case 2:
                         try
                         {
-                            Inventory.Add("Potion", new Items.Potions());
+                            Inventory.Add("Potion", new Item.Potion());
                         }
                         catch (ArgumentException)
                         {
@@ -181,7 +182,7 @@ namespace RPG_Csharp
                         }
                         break;
                     case 3:
-                        error = getNewArmor();
+                        error = ArmorListManager.getNewArmor(Inventory);
                         break;
                     default:
                         break;
@@ -189,39 +190,7 @@ namespace RPG_Csharp
             } while (error == -1);
 
         }
-        private int getNewArmor()
-        {
-            try
-            {
-                Inventory.Add("Plastron", new Items.Armors("plastron"));
-            }
-            catch (ArgumentException)
-            {
-                try
-                {
-                    Inventory.Add("Casque", new Items.Armors("casque"));
-                }
-                catch (ArgumentException)
-                {
-                    try
-                    {
-                        Inventory.Add("Pantalon", new Items.Armors("pantalon"));
-                    }
-                    catch (ArgumentException)
-                    {
-                        try
-                        {
-                            Inventory.Add("Bottes", new Items.Armors("bottes"));
-                        }
-                        catch (ArgumentException)
-                        {
-                            return -1;
-                        }
-                    }
-                }
-            }
-            return 1;
-        }
+
     }
 
 }

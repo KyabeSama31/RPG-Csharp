@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RPG_Csharp
 {
-    class Items
+    class Item
     {
-        public class Weapons
+        public class Weapon
         {
             private string type;
 
-            public Weapons(string classe) // Le constructeur Weapons va générer une arme en fonction de la classe. 
+            public Weapon(string classe) // Le constructeur Weapons va générer une arme en fonction de la classe. 
             {
                 switch (classe)
                 {
@@ -69,10 +67,10 @@ namespace RPG_Csharp
 
         }
        
-       public class Potions
+       public class Potion
         {
             private int healingBonus;
-            public Potions()
+            public Potion()
             {
                 healingBonus = 5;
             }
@@ -83,10 +81,10 @@ namespace RPG_Csharp
         }
 
 
-        public class Armors
+        public class Armor
         {
             private int armorValue=0;
-            public Armors(string type)
+            public Armor(string type)
             {
                 
                 switch (type)
@@ -108,7 +106,7 @@ namespace RPG_Csharp
                         break;
                 }
             }
-            public Armors()
+            public Armor()
             {
 
             }

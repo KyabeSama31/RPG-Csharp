@@ -6,4 +6,8 @@
     <RootNamespace>RPG_Csharp</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="saves\" />
+  </ItemGroup>
+
 </Project>

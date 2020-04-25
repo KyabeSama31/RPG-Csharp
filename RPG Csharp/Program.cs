@@ -7,6 +7,8 @@ namespace RPG_Csharp
         static void Main(string[] args)
         {
             GameHandler GameHandler = new GameHandler();
+            Utilisateur utilisateur = new Utilisateur();
+            SaveMaker saveMaker = new SaveMaker();
             string pseudo;
             int correct = 0;
             Player p1;
@@ -18,7 +20,7 @@ namespace RPG_Csharp
                 Console.WriteLine("Entrez votre pseudo : ");
                 pseudo = Utilisateur.saisirTexte();
                 GameHandler.start(pseudo);
-                GameHandler.confirmation();
+                utilisateur.confirmation();
 
                 p1 = new Player(pseudo);
                 p1.display();
@@ -37,7 +39,7 @@ namespace RPG_Csharp
                 do
                 {
                     b1.display();
-                    GameHandler.confirmation();
+                    utilisateur.confirmation();
                     Console.WriteLine("");
 
                     p1.actions(b1);
@@ -46,16 +48,12 @@ namespace RPG_Csharp
                     if (b1.getLife() > 0)
                     {
                         Console.WriteLine("Votre adversaire riposte ! Soyez sur vos gardes !");
-                        GameHandler.confirmation();
+                        utilisateur.confirmation();
                         b1.actions(p1);
                         p1.display();
                     }
 
-                    Console.WriteLine("");
-                    continuePlay = GameHandler.continuePlay();
-                    Console.WriteLine("");
-
-                } while (continuePlay);
+                } while (p1.getLife() > 0 && b1.getLife() > 0);
 
                 if (p1.getLife()>0)
                 {
@@ -63,14 +61,23 @@ namespace RPG_Csharp
                     b1.setXp();
                     xpB += b1.getXp();
                     lvlB += b1.getLvl();
-
-                    continuePlay = GameHandler.continuePlay();
-
-                    roundNb++;
                 }
 
-            } while (p1.getLife() > 0 || b1.getLife() > 0 || continuePlay);
+                continuePlay = utilisateur.continuePlay();
 
+                roundNb++;
+
+            } while (continuePlay);
+
+            if (!continuePlay)
+            {
+                if (utilisateur.askYesNo("Voulez vous sauvegarder votre aventure ?"))
+                {
+                    saveMaker.save(p1);
+                }
+               
+
+            }
             if (p1.getLife() <= 0)
             {
                 Console.WriteLine("L'aventure est finie pour vous. Vous vous êtes bien battus !");

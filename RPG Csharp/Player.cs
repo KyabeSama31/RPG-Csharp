@@ -6,10 +6,12 @@ namespace RPG_Csharp
 {
     class Player
     {
+        Utilisateur utilisateur = new Utilisateur();
         GameHandler gameHandler = new GameHandler();
-        Items.Armors armor = new Items.Armors();
+        Item.Armor armor = new Item.Armor();
         Dictionary<string, dynamic> Inventory = new Dictionary<string, dynamic>();
-
+        ArmorListManager ArmorListManager = new ArmorListManager();
+        
         public string pseudo { get; private set; }
         private int physique;
         private int mental;
@@ -65,7 +67,7 @@ namespace RPG_Csharp
                 sommeStat = physique + mental + agilite + charisme + perception;
 
             } while (sommeStat != 290 && physique < max && mental < max && agilite < max && charisme < max && perception < max);
-            Inventory.Add("Arme", new Items.Weapons(classe)); // On ajoute une arme à l'inventaire en fonction de la classe choisie (ref constructeur Weapons)
+            Inventory.Add("Arme", new Item.Weapon(classe)); // On ajoute une arme à l'inventaire en fonction de la classe choisie (ref constructeur Weapons)
         }
 
         public void display()
@@ -119,7 +121,7 @@ namespace RPG_Csharp
         }
 
         //Cette fonction permet de gérer les dégats infligés par le bot au joueur.
-        public void damagePlayer(Items.Weapons weapons, int bonus)
+        public void damagePlayer(Item.Weapon weapons, int bonus)
         {
             Console.WriteLine(" ");
             int damages = weapons.dealDamages();
@@ -144,8 +146,8 @@ namespace RPG_Csharp
                 succes = ChooseActions();
             }
             Console.WriteLine("Aventurier ! Lancez les dés !");
-            gameHandler.confirmation();
-            int result = gameHandler.RollDices();
+            utilisateur.confirmation();
+            int result = utilisateur.RollDices();
             Console.WriteLine($"Vous avez obtenu \u001b[31m{result}\u001b[0m à votre lancé !");
             Console.WriteLine(" ");
             Console.WriteLine(" ");
@@ -256,7 +258,7 @@ namespace RPG_Csharp
         private bool tentative()
         {
             int succes = (int)(agilite + perception) / 2;
-            int result = gameHandler.RollDices();
+            int result = utilisateur.RollDices();
             Console.WriteLine($"Vous avez obtenu \u001b[31m{result}\u001b[0m.");
             Console.WriteLine("");
             if (result <= 5)
@@ -327,7 +329,7 @@ namespace RPG_Csharp
                         break;
                     case 2:
                         try { 
-                        Inventory.Add("Potion", new Items.Potions());
+                        Inventory.Add("Potion", new Item.Potion());
                         } catch (ArgumentException)
                         {
                             Console.WriteLine("Vous avez déjà une potion sur vous. ");
@@ -335,7 +337,7 @@ namespace RPG_Csharp
                         }
                         break;
                     case 3:
-                        error = getNewArmor();
+                        error = ArmorListManager.getNewArmor(Inventory);
                         break;
                     default:
                         break;
@@ -343,42 +345,6 @@ namespace RPG_Csharp
             } while (error == -1);
            
         }
-        private int getNewArmor()
-        {
-            try
-            {
-                Inventory.Add("Plastron", new Items.Armors("plastron"));
-            }
-            catch (ArgumentException)
-            {
-                try
-                {
-                    Console.WriteLine("Vous avez déjà ce plaston prenez le casque plutôt.");
-                    Inventory.Add("Casque", new Items.Armors("casque"));
-                }
-                catch (ArgumentException)
-                {
-                    try
-                    {
-                        Console.WriteLine("Vous avez déjà ce casque prenez le pantalon plutôt.");
-                        Inventory.Add("Pantalon", new Items.Armors("pantalon"));
-                    }
-                    catch (ArgumentException)
-                    {
-                        try
-                        {
-                            Console.WriteLine("Vous avez déjà ce pantalon prenez les bottes plutôt.");
-                            Inventory.Add("Bottes", new Items.Armors("bottes"));
-                        }
-                        catch (ArgumentException)
-                        {
-                            Console.WriteLine("Vous avez déjà une arumre complète");
-                           return -1;
-                        }
-                    }
-                }
-            }
-            return 1;
-        }
+       
     }
 }
