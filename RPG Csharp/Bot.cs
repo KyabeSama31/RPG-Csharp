@@ -4,25 +4,8 @@ using System.Text;
 
 namespace RPG_Csharp
 {
-    class Bot
+    class Bot : Personnage
     {
-        GameHandler gameHandler = new GameHandler();
-        Item.Armor armor = new Item.Armor();
-        ArmorListManager ArmorListManager = new ArmorListManager();
-        Utilisateur utilisateur = new Utilisateur();
-        Dictionary<string, dynamic> Inventory = new Dictionary<string, dynamic>();
-
-        public string pseudo { get; private set; }
-        private int physique;
-        private int mental;
-        private int agilite;
-        private int charisme;
-        private int perception;
-        private int vie;
-        private int mana;
-        private string classe;
-        private int xp;
-        private int lvl;
 
         public Bot(int newXp, int newLvl)
         {
@@ -39,19 +22,7 @@ namespace RPG_Csharp
             lvl = newLvl;
             Inventory.Add("Arme", new Item.Weapon(classe));
         }
-        public void display()
-        {
-            Console.WriteLine($"Le Bot est \u001b[33m{pseudo}\u001b[0m.");
-            Console.WriteLine($"C'est un {classe}.");
-            Console.WriteLine($"Il a \u001b[31m{physique}\u001b[0m en physique.");
-            Console.WriteLine($"Il a \u001b[31m{mental}\u001b[0m en mental.");
-            Console.WriteLine($"Il a \u001b[31m{agilite}\u001b[0m en agilite.");
-            Console.WriteLine($"Il a \u001b[31m{charisme}\u001b[0m en charisme.");
-            Console.WriteLine($"Il a \u001b[31m{perception}\u001b[0m en perception.");
-            Console.WriteLine($"Sa vie est de \u001b[32m{vie}\u001b[0m pv.");
-            Console.WriteLine($"Sa mana est de \u001b[34m{mana}\u001b[0m pm.");
-            Console.WriteLine($"Il est de niveau \u001b[34m{lvl}\u001b[0m pm.");
-        }
+    
         private string GenerateName()//code récupéré sur internet pour générer le nom du bot à sa création
         {
             Random lentgh = new Random();
@@ -71,19 +42,6 @@ namespace RPG_Csharp
                 b++;
             }
             return Name;
-        }
-
-        public int getLife()
-        {
-            return vie;
-        }
-        public int getXp()
-        {
-            return xp;
-        }
-        public int getLvl()
-        {
-            return lvl;
         }
 
         public void damageBot(Item.Weapon weapons, int bonus)//Fonction utilisée quand le bot reçoit des dégats 
@@ -140,57 +98,18 @@ namespace RPG_Csharp
                 //Conséquence à choisir
 
             }
-        }
-
-        public void setXp()
+        }    
+        private new void newItem(int choix)
         {
-            Console.WriteLine("Votre adversaire aussi devient plus fort. Attention ! ");
-            Random r = new Random();
-            int gainXp = r.Next(5, 21);
-            xp += gainXp;
-
-            if (xp >= 100)
-            {
-                xp -= 100;
-                lvl += 1;
-                Console.WriteLine($"Attention ! Les ennemis s'adaptent, ils sont niveau {lvl} !\n");
-                newItem();
-            }
-        }
-        private void newItem()
-        {
-            int choix;
             int error = 1;
             do
             {
                 Random r = new Random();
                 choix = r.Next(1, 3);
 
-                switch (choix)
-                {
-                    case 1:
-                        error = Inventory["Arme"].setType();
-                        break;
-                    case 2:
-                        try
-                        {
-                            Inventory.Add("Potion", new Item.Potion());
-                        }
-                        catch (ArgumentException)
-                        {
-                            error = -1;
-                        }
-                        break;
-                    case 3:
-                        error = ArmorListManager.getNewArmor(Inventory);
-                        break;
-                    default:
-                        break;
-                }
+               error = base.newItem(choix);
+
             } while (error == -1);
-
         }
-
     }
-
 }

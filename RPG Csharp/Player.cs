@@ -4,32 +4,16 @@ using System.Collections.Generic;
 
 namespace RPG_Csharp
 {
-    class Player
+    class Player : Personnage
     {
-        Utilisateur utilisateur = new Utilisateur();
-        GameHandler gameHandler = new GameHandler();
-        Item.Armor armor = new Item.Armor();
-        Dictionary<string, dynamic> Inventory = new Dictionary<string, dynamic>();
-        ArmorListManager ArmorListManager = new ArmorListManager();
-        
-        public string pseudo { get; private set; }
-        private int physique;
-        private int mental;
-        private int agilite;
-        private int charisme;
-        private int perception;
-        private int vie;
-        private int mana;
-        private string classe;
-        private int xp;
-        private int lvl;
+
         /*
          * C'est le constructeur du Player.
          * Il met en place la classe, les stats et l'arme du joueur 
          */
         public Player(string newPseudo)
         {
-            pseudo = setPseudo(newPseudo);
+            pseudo = newPseudo;
 
             do
             {
@@ -70,29 +54,6 @@ namespace RPG_Csharp
             Inventory.Add("Arme", new Item.Weapon(classe)); // On ajoute une arme à l'inventaire en fonction de la classe choisie (ref constructeur Weapons)
         }
 
-        public void display()
-        {
-            Console.WriteLine($"Vous êtes \u001b[33m{pseudo}\u001b[0m.");
-            Console.WriteLine($"Vous avez choisi la classe {classe}.");
-            Console.WriteLine($"Vous avez \u001b[31m{physique}\u001b[0m en physique.");
-            Console.WriteLine($"Vous avez \u001b[31m{mental}\u001b[0m en mental.");
-            Console.WriteLine($"Vous avez \u001b[31m{agilite}\u001b[0m en agilite.");
-            Console.WriteLine($"Vous avez \u001b[31m{charisme}\u001b[0m en charisme.");
-            Console.WriteLine($"Vous avez \u001b[31m{perception}\u001b[0m en perception.");
-            Console.WriteLine($"Votre vie est de \u001b[32m{vie}\u001b[0m pv.");
-            Console.WriteLine($"Votre mana est de \u001b[34m{mana}\u001b[0m pm.");
-            Console.WriteLine($"Vous êtes niveau \u001b[34m{lvl}\u001b[0m.");
-        }
-
-        public int getLife()
-        {
-            return vie;
-        }
-
-        public string setPseudo(string newPseudo)
-        {
-            return newPseudo;
-        }
 
         private string pickClass()
         {
@@ -287,27 +248,9 @@ namespace RPG_Csharp
          * Elle lui permettent aussi de récupérer de l'équipement
          */
 
-        public void setXp()
+        private new void newItem(int choix)
         {
-            Console.WriteLine("Vous avez vaincu votre adversaire ! ");
-            Console.WriteLine("Voici le moment d'être récompensé !");
-            Random r = new Random();
-            int gainXp = r.Next(5, 21);
-            Console.WriteLine($"Vous venez de gagner {gainXp}");
-            xp += gainXp;
-
-            if (xp >= 100)
-            {
-                xp -= 100;
-                lvl += 1;
-                Console.WriteLine($"Vous gagnez un niveau ! Vous êtes niveau {lvl} !\n");
-                newItem();
-            }
-        }
-
-        private void newItem()
-        {
-            int choix;
+            
             Console.WriteLine("Vous avez le droit à un nouvel item ! ");
             int error = 1;
             do
@@ -322,26 +265,8 @@ namespace RPG_Csharp
                     Console.WriteLine(" ");
                 } while (choix < 1 || choix > 3);
 
-                switch (choix)
-                {
-                    case 1:
-                       error = Inventory["Arme"].setType();
-                        break;
-                    case 2:
-                        try { 
-                        Inventory.Add("Potion", new Item.Potion());
-                        } catch (ArgumentException)
-                        {
-                            Console.WriteLine("Vous avez déjà une potion sur vous. ");
-                            error = -1;
-                        }
-                        break;
-                    case 3:
-                        error = ArmorListManager.getNewArmor(Inventory);
-                        break;
-                    default:
-                        break;
-                }
+                error = base.newItem(choix);
+                
             } while (error == -1);
            
         }
